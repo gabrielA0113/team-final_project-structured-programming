@@ -1,5 +1,3 @@
-# MorenoJuarez-GiulioMaximiliano-Structured-Programming
-Practice exercises for Structured Programming course
 # team-final_project-structured-programming
 Final Project
 Navar Diaz Gabriel de Jesus
