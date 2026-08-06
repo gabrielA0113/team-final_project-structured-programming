@@ -160,7 +160,55 @@ def eliminar_usuario_db(nombre):
     finally:
         cursor.close()
         close_conection(conexion)
+def modificar_usuario_db(nombre):
+    """Modifica los datos de un usuario existente."""
+    conexion = crear_conexion()
 
+    if conexion is None:
+        print(f"{ROJO}Error: No hay conexión a la BD.{RESET}")
+        return False
+
+    try:
+        cursor = conexion.cursor()
+
+        query_buscar = "SELECT id_usuario FROM usuario WHERE nombre = %s"
+        cursor.execute(query_buscar, (nombre.upper(),))
+        resultado = cursor.fetchone()
+
+        if not resultado:
+            print(f"{ROJO}Error: El usuario no existe en la base de datos.{RESET}")
+            return False
+
+        id_usuario = resultado[0]
+
+        print(f"\n{AMARILLO}Ingrese los nuevos datos:{RESET}")
+
+        correo = solicitar_correo()
+        telefono = solicitar_telefono()
+        tipo = solicitar_tipo()
+
+        query_actualizar = """
+            UPDATE usuario
+            SET correo = %s,
+                telefono = %s,
+                tipo = %s
+            WHERE id_usuario = %s
+        """
+
+        cursor.execute(query_actualizar, (correo, telefono, tipo, id_usuario))
+        conexion.commit()
+
+        print(f"{CIAN}Usuario actualizado correctamente.{RESET}")
+        return True
+
+    except Error as e:
+        print(f"{ROJO}Error al actualizar en MySQL: {e}{RESET}")
+        conexion.rollback()
+        return False
+
+    finally:
+        cursor.close()
+        close_conection(conexion)
 
 # ==========================================
 # FUNCIONES PARA EL NEGOCIO
@@ -309,12 +357,13 @@ def desglose_cambio_recursivo(monto, billetes=[500, 200, 100, 50, 20, 10, 5, 2, 
 
 opcion_elegida = 0
 
-while opcion_elegida != 4:
+while opcion_elegida != 5:
     print(f"\n{CIAN}=== {configuracion_sistema['nombre_app']} ==={RESET}")
     print("1. Registrar nuevo servicio")
     print("2. Reporte de ingresos")
-    print("3. Eliminar registro de usuario")
-    print("4. Salir")
+    print("3. Modificar registro de usuario")
+    print("4. Eliminar registro de usuario")
+    print("5. Salir")
     
     try:
         opcion_elegida = int(input(f"{AMARILLO}Seleccione opción:{RESET} "))
@@ -361,14 +410,18 @@ while opcion_elegida != 4:
         mostrar_reporte_estadistico(tickets_bd, kwh_bd, dinero_bd)
 
     elif opcion_elegida == 3:
+        nombre = solicitar_nombre()
+        modificar_usuario_db(nombre)
+
+    elif opcion_elegida == 4:
         nombre_a_borrar = solicitar_nombre()
         eliminar_usuario_db(nombre_a_borrar)
 
-    elif opcion_elegida == 4:
-        print("Finalizando sistema. Gracias por usar CFE Ticket System.")
+    elif opcion_elegida == 5:
+         print("Finalizando sistema. Gracias por usar CFE Ticket System.")
 
     else:
-        print(f"{ROJO}Opción inválida, ingrese una opción válida (1-4).{RESET}")
+        print(f"{ROJO}Opción inválida, ingrese una opción válida (1-5).{RESET}")
 
 # --- BITÁCORA DE IA ---
 # 1. Se integró 'historial_de_operaciones' (Lista) y 'configuracion_sistema' (Diccionario).
