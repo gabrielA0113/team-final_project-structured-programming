@@ -431,3 +431,5 @@ while opcion_elegida != 5:
 # 5. Se eliminó la Opción 4 y toda referencia a la versión del sistema.
 # 6. Se implementó la función 'eliminar_usuario_db' para completar la operación Delete (CRUD).
 # 7. Se actualizó el menú principal con la Opción 3 para eliminación y la Opción 4 para salida.
+# 8. Se implementó la función 'modificar_usuario_db' para completar la operación Update (CRUD).
+# 9. Se agregó la opción "Modificar registro de usuario" al menú principal, recorriendo las opciones de Eliminar a la opción 4 y Salir a la opción 5.
