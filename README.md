@@ -12,4 +12,4 @@
 
 -Urbina Avitia Rodolfo 
 
-#Sistema de escritorio en consola para el cálculo de tickets mediante fórmula de consumo energético
+-Sistema de escritorio en consola para el cálculo de tickets mediante fórmula de consumo energético-
